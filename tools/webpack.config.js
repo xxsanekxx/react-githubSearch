@@ -96,6 +96,7 @@ const config = {
 const appConfig = merge({}, config, {
   entry: [
     ...(WATCH ? ['webpack-hot-middleware/client'] : []),
+    'babel/polyfill',
     './app.js',
   ],
   output: {
