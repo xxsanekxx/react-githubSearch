@@ -6,16 +6,16 @@
 
 import React from 'react';
 import './Navigation.scss';
-import Link from '../Link';
+import { Link } from 'react-router';
 
 function Navigation() {
   return (
     <ul className="Navigation" role="menu">
       <li className="Navigation-item">
-        <a className="Navigation-link" href="/" onClick={Link.handleClick}>Home</a>
+        <Link to="/" activeClassName="active" className="Navigation-link">Home</Link>
       </li>
       <li className="Navigation-item">
-        <a className="Navigation-link" href="/about" onClick={Link.handleClick}>About</a>
+        <Link to="/about" activeClassName="active" className="Navigation-link">About</Link>
       </li>
     </ul>
   );
