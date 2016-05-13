@@ -64,9 +64,6 @@ const config = {
   module: {
     loaders: [
       {
-        test: /[\\\/]app\.js$/,
-        loader: path.join(__dirname, './lib/routes-loader.js'),
-      }, {
         test: /\.json$/,
         loader: 'json-loader',
       }, {
