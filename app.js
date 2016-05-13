@@ -4,28 +4,34 @@
  * Copyright (c) Konstantin Tarkus (@koistya) | MIT license
  */
 
-import 'babel/polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { canUseDOM } from 'fbjs/lib/ExecutionEnvironment';
-import Location from './core/Location';
 import Layout from './components/Layout';
+import IndexPage from './pages/index';
+import AboutPage from './pages/about';
+import NotFoundPage from './pages/404';
+import ServerErrorPage from './pages/500';
+import { Router, Route, Link, browserHistory } from 'react-router';
 
-const routes = {}; // Auto-generated on build. See tools/lib/routes-loader.js
-
-const route = async (path, callback) => {
-  const handler = routes[path] || routes['/404'];
-  const component = await handler();
-  await callback(<Layout>{React.createElement(component)}</Layout>);
+const routes = {
+  path: '/',
+  component: Layout,
+  indexRoute: { component: IndexPage },
+  childRoutes: [
+    { path: 'about', component: AboutPage },
+    { path: '500', component: ServerErrorPage },
+    { path: '*', component: NotFoundPage },
+  ]
 };
 
 function run() {
   const container = document.getElementById('app');
-  Location.listen(location => {
-    route(location.pathname, async (component) => ReactDOM.render(component, container, () => {
-      // Track the page view event via Google Analytics
-      window.ga('send', 'pageview');
-    }));
+  ReactDOM.render((
+    <Router history={browserHistory} routes={routes} />
+  ), container, () => {
+    // Track the page view event via Google Analytics
+    window.ga('send', 'pageview');
   });
 }
 
@@ -38,4 +44,4 @@ if (canUseDOM) {
   }
 }
 
-export default { route, routes };
+export default { routes };

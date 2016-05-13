@@ -4,10 +4,13 @@
  * Copyright (c) Konstantin Tarkus (@koistya) | MIT license
  */
 
+//todo refactor all this render page
+
 import glob from 'glob';
 import { join, dirname } from 'path';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
+import { match, RouterContext } from 'react-router';
 import Html from '../components/Html';
 import task from './lib/task';
 import fs from './lib/fs';
@@ -47,8 +50,10 @@ async function renderPage(page, component) {
 
 export default task(async function render() {
   const pages = await getPages();
-  const { route } = require('../build/app.node');
+  const { routes } = require('../build/app.node');
   for (const page of pages) {
-    await route(page.path, renderPage.bind(undefined, page));
+    await match({ routes, location: page.path }, (error, redirectLocation, renderProps) => {
+      renderPage(page, <RouterContext {...renderProps} />);
+    });
   }
 });
