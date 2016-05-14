@@ -4,7 +4,7 @@
  * Copyright (c) Konstantin Tarkus (@koistya) | MIT license
  */
 
-//todo refactor all this render page
+// todo refactor all this render page
 
 import glob from 'glob';
 import { join, dirname } from 'path';
@@ -51,9 +51,9 @@ async function renderPage(page, component) {
 export default task(async function render() {
   const pages = await getPages();
   const { routes } = require('../build/app.node');
-  for (const page of pages) {
-    await match({ routes, location: page.path }, (error, redirectLocation, renderProps) => {
+  pages.forEach(page => {
+    match({ routes, location: page.path }, (error, redirectLocation, renderProps) => {
       renderPage(page, <RouterContext {...renderProps} />);
     });
-  }
+  });
 });
