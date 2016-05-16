@@ -1,31 +1,34 @@
-import fetch from 'isomorphic-fetch';
+require('isomorphic-fetch');
 const URL_API = 'https://api.github.com';
+// https://help.github.com/articles/searching-repositories/#search-based-on-the-number-of-forks-the-parent-repository-has
 const FORKS_TYPES_INCLUDE = ['only', 'true'];
 
-//todo create parse function, object to query string github api syntax
 /**
  *
  * @param name
  * @param from
  * @param to
+ * @param dateFormat {boolean}
  * @returns {string}
  */
-function rangeToQueryStrByName(name, from, to) {
-  let query = name + ':';
+function rangeToQueryStrByName(name, from, to, dateFormat) {
+  let query = name + ':',
+    resFrom = dateFormat ? new Date(from).toISOString() : from,
+    resTo = dateFormat ? new Date(to).toISOString() : to;
 
-  if (from == to) {
-    query = query + from;
+  if (from === to) {
+    query = query + '"' + resFrom + '"';
   } else if (!from) {
-    query = query + '<=' + to;
+    query = query + '"' + '<=' + resTo + '"';
   } else if (!to) {
-    query = query + '>=' + from;
+    query = query + '"' + '>=' + resFrom + '"';
   } else {
     if (from > to) {
-      let tmp = from;
-      from = to;
-      to = tmp;
+      const tmp = resFrom;
+      resFrom = resTo;
+      resTo = tmp;
     }
-    query = query + from + '..' + to;
+    query = query + '"' + resFrom + '..' + resTo + '"';
   }
 
   return query;
@@ -65,6 +68,10 @@ export function searchRepositories(params = {}) {
   }
 
   if (params.query && params.in) {
+    if (!Array.isArray(params)) {
+      params.in = [params.in];
+    }
+    params.in = params.in.join(',');
     query = addStrToQuery(query, 'in:' + params.in);
   }
   if (params.language) {
@@ -86,10 +93,10 @@ export function searchRepositories(params = {}) {
     query = addStrToQuery(query, rangeToQueryStrByName('forks', params.forks.from, params.forks.to));
   }
   if (params.created && (params.created.from || params.created.to)) {
-    query = addStrToQuery(query, rangeToQueryStrByName('created', new Date(params.created.from).getTime(), new Date(params.created.to).getTime()));
+    query = addStrToQuery(query, rangeToQueryStrByName('created', new Date(params.created.from).getTime(), new Date(params.created.to).getTime(), true));
   }
   if (params.pushed && (params.pushed.from || params.pushed.to)) {
-    query = addStrToQuery(query, rangeToQueryStrByName('pushed', new Date(params.pushed.from).getTime(), new Date(params.pushed.to).getTime()));
+    query = addStrToQuery(query, rangeToQueryStrByName('pushed', new Date(params.pushed.from).getTime(), new Date(params.pushed.to).getTime(), true));
   }
   return fetch(URL_API + '/search/repositories' + (query ? '?q=' + query : ''))
     .then(response => response.json());
