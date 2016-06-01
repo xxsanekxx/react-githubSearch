@@ -1,0 +1,5 @@
+{
+  "name": "SearchForm",
+  "private": true,
+  "main": "./SearchForm.js"
+}

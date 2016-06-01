@@ -25,7 +25,7 @@ const JS_LOADER = {
   test: /\.jsx?$/,
   include: [
     path.resolve(__dirname, '../components'),
-    path.resolve(__dirname, '../core'),
+    path.resolve(__dirname, '../services'),
     path.resolve(__dirname, '../pages'),
     path.resolve(__dirname, '../app.js'),
     path.resolve(__dirname, '../config.js'),
@@ -82,6 +82,9 @@ const config = {
     return [
       require('postcss-import')({ addDependencyTo: bundler }),
       require('precss')(),
+      require('postcss-url')({
+        copy: 'rebase',
+      }),
       require('autoprefixer')({
         browsers: AUTOPREFIXER_BROWSERS,
       }),
@@ -94,6 +97,7 @@ const appConfig = merge({}, config, {
   entry: [
     ...(WATCH ? ['webpack-hot-middleware/client'] : []),
     'babel/polyfill',
+    'isomorphic-fetch',
     './app.js',
   ],
   output: {
@@ -151,7 +155,7 @@ const appConfig = merge({}, config, {
 
 // Configuration for server-side pre-rendering bundle
 const pagesConfig = merge({}, config, {
-  entry: './app.js',
+  entry: ['isomorphic-fetch', './app.js'],
   output: {
     filename: 'app.node.js',
     libraryTarget: 'commonjs2',

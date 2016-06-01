@@ -1,0 +1,5 @@
+{
+  "private": true,
+  "name": "Pagination",
+  "main": "./Pagination.js"
+}

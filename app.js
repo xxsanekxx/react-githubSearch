@@ -9,7 +9,7 @@ import ReactDOM from 'react-dom';
 import { canUseDOM } from 'fbjs/lib/ExecutionEnvironment';
 import Layout from './components/Layout';
 import IndexPage from './pages/index';
-import AboutPage from './pages/about';
+import RepoInfoPage from './pages/repo';
 import NotFoundPage from './pages/404';
 import ServerErrorPage from './pages/500';
 import { Router, Route, Link, browserHistory } from 'react-router';
@@ -19,7 +19,7 @@ const routes = {
   component: Layout,
   indexRoute: { component: IndexPage },
   childRoutes: [
-    { path: 'about', component: AboutPage },
+    { path: 'repo/:owner/:name', component: RepoInfoPage },
     { path: '500', component: ServerErrorPage },
     { path: '*', component: NotFoundPage },
   ]

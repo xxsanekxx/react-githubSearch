@@ -1,0 +1,5 @@
+{
+  "private": true,
+  "name": "ItemsPerPage",
+  "main": "./ItemsPerPage.js"
+}
