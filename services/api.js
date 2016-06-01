@@ -1,4 +1,3 @@
-require('isomorphic-fetch');
 const URL_API = 'https://api.github.com';
 // https://help.github.com/articles/searching-repositories/#search-based-on-the-number-of-forks-the-parent-repository-has
 const FORKS_TYPES_INCLUDE = ['only', 'true'];
@@ -43,17 +42,6 @@ function addStrToQuery(query, str) {
   return query ? query + '+' + str : str;
 }
 
-/**
- * Get last 100 repositories
- * @param params
- * @returns {*}
- */
-export function getLastRepositories(params = {}) {
-  return fetch(URL_API + '/repositories' + (params.since > 0 ? '?since=' + params.since : ''))
-    .then(response => {
-      return response.json();
-    });
-}
 
 /**
  * Search repositories
@@ -61,6 +49,7 @@ export function getLastRepositories(params = {}) {
  * @returns {*}
  */
 export function searchRepositories(params = {}) {
+  // todo add order and sort
   let query = '';
 
   if (params.query) {
@@ -100,6 +89,18 @@ export function searchRepositories(params = {}) {
   }
   return fetch(URL_API + '/search/repositories' + (query ? '?q=' + query : ''))
     .then(response => response.json());
+}
+
+/**
+ * Get last 100 repositories
+ * @param params
+ * @returns {*}
+ */
+export function getLastRepositories(params = {}) {
+  return fetch(URL_API + '/repositories' + (params.since > 0 ? '?since=' + params.since : ''))
+    .then(response => {
+      return response.json();
+    });
 }
 
 /**

@@ -1,0 +1,5 @@
+{
+  "private": true,
+  "name": "RepoInfo",
+  "main": "./RepoInfo.js"
+}

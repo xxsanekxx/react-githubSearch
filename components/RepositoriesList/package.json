@@ -1,0 +1,5 @@
+{
+  "name": "RepositoriesList",
+  "private": true,
+  "main": "./RepositoriesList.js"
+}
